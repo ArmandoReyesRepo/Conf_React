@@ -3,8 +3,8 @@ import {Card, CardImg, CardText, CardBody,
     CardTitle, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {Control, LocalForm, Errors} from 'react-redux-form';
-import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
-    Label} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody,
+    Label, Col, Row} from 'reactstrap';
 
 
 
@@ -29,6 +29,10 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
         }
     }
 
+    const required = (val) => val && val.length;
+    const maxLength = (len) => (val) => !(val) || (val.length<=len);
+    const minLength = (len) => (val) => (val) && (val.length>=len);
+
     class CommentForm extends Component {
 
         constructor(props) {
@@ -37,7 +41,7 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
                 isModalOpen:false
             };
             this.toggleModal = this.toggleModal.bind(this);
-            this.handleLogin = this.handleLogin.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this); 
         }
 
         toggleModal(){
@@ -46,13 +50,13 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
             });
         }
 
-        handleLogin(event) {
-            this.toggleModal();
-            alert("Username: " + this.username.value + "Password: " + this.password.value 
-                 + "Remember: " + this.remember.checked);
-            event.preventDefault(); 
+        handleSubmit(values){
+            console.log("Current State is:" + JSON.stringify(values));
+            alert("Current State is:" + JSON.stringify(values));
+            this.toggleModal();   
         }
 
+    
         render() { 
             
             return(
@@ -61,28 +65,64 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
                 <span className= "fa fa-pencil fa-lg"> Submit Comment  </span>
             </Button>
             <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-            <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+            <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
             <ModalBody>
-                <Form onSubmit = {this.handleLogin}>
-                    <FormGroup>
-                        <Label htmlFor ="username"> Username </Label>
-                        <Input type="text"  id="username" name="username"
-                        innerRef={(input)=> this.username = input}/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label htmlFor ="password"> Password </Label>
-                        <Input type="password"  id="username" name="password"
-                        innerRef={(input)=> this.password = input}/>
-                    </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Input type="checkbox" name="remember" 
-                            innerRef={(input)=> this.remember = input}/>
-                            Remember me
-                        </Label>
-                    </FormGroup>
-                    <Button type="submit" value="submit" className="bg-primary"> Login </Button>
-                </Form>
+                <LocalForm onSubmit = {this.handleSubmit}> 
+                    <Row className="form-group">
+                        <Col md={12}>
+                            <Label htmlfor="rating" >Rating</Label>
+                        </Col>
+                        <Col md={12}>
+                            <Control.select model=".rating" id="rating" name="rating" 
+                            className="form-control" >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </Control.select>
+                        </Col>
+                    </Row>
+                    <Row className="form-group">
+                        <Label htmlfor="yourname" md={12}>Your Name </Label>
+                            <Col >
+                                <Control.text model=".yourname" id="yourname" name="yourname"
+                                placeholder="Your Name"
+                                className="form-control"
+                                validators ={{
+                                    required, minLength:minLength(3), maxLength:maxLength(15)
+                                }}
+                                />
+                                <Errors
+                                    className="text-danger"
+                                    model=".yourname"
+                                    show="touched"
+                                    messages={{
+                                        required:'Required',
+                                        minLength:'Must be greater than 3 characters',
+                                        maxLength: 'Must be 15 characters or less'
+                                    }}
+                                />
+                            </Col>
+                    </Row>
+                    <Row className="form-group">
+                        <Label htmlfor="comment" md={12}>Comment </Label>
+                        <Col md={12}>
+                            <Control.textarea model=".comment" id="comment" name="comment"
+                            rows="6"
+                            className="form-control"
+                            />
+                        </Col>
+                    </Row>
+                    <Row className="form-group" >
+                        <Col md={{size:12}}>
+                            <Button type="submit" color="primary">
+                                Submit
+                            </Button>  
+                        </Col>   
+                    </Row>
+                    
+                </LocalForm>
             </ModalBody>
         </Modal>
             </>
@@ -106,7 +146,8 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input,
                     <ul className = "list-unstyled">
                         {commentView}
                     </ul>
-                    <CommentForm/>                  
+                    <CommentForm/>   
+                    <Row>&nbsp;</Row>               
                 </div>        
              
          );
