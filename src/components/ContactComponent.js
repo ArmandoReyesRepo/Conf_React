@@ -196,7 +196,6 @@ class Contact extends Component  {
                                         Send Feedback
                                     </Button>
                                 </Col>   
-
                             </Row>
                         </LocalForm>
                     </div>

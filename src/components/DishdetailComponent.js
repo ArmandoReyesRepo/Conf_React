@@ -51,9 +51,8 @@ import {Button, Modal, ModalHeader, ModalBody,
         }
 
         handleSubmit(values){
-            console.log("Current State is:" + JSON.stringify(values));
-            alert("Current State is:" + JSON.stringify(values));
             this.toggleModal();   
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         }
 
     
@@ -84,9 +83,9 @@ import {Button, Modal, ModalHeader, ModalBody,
                         </Col>
                     </Row>
                     <Row className="form-group">
-                        <Label htmlfor="yourname" md={12}>Your Name </Label>
+                        <Label htmlfor="author" md={12}>Your Name </Label>
                             <Col >
-                                <Control.text model=".yourname" id="yourname" name="yourname"
+                                <Control.text model=".author" id="author" name="author"
                                 placeholder="Your Name"
                                 className="form-control"
                                 validators ={{
@@ -95,7 +94,7 @@ import {Button, Modal, ModalHeader, ModalBody,
                                 />
                                 <Errors
                                     className="text-danger"
-                                    model=".yourname"
+                                    model=".author"
                                     show="touched"
                                     messages={{
                                         required:'Required',
@@ -129,7 +128,7 @@ import {Button, Modal, ModalHeader, ModalBody,
         ); }      
     }
 
-    function RenderComments({comments}){
+    function RenderComments({comments, addComment, dishId}){
        
         if(comments !== null){
             const commentView = comments.map((c) => 
@@ -146,7 +145,7 @@ import {Button, Modal, ModalHeader, ModalBody,
                     <ul className = "list-unstyled">
                         {commentView}
                     </ul>
-                    <CommentForm/>   
+                    <CommentForm dishId={dishId} addComment={addComment}/>   
                     <Row>&nbsp;</Row>               
                 </div>        
              
@@ -182,7 +181,9 @@ import {Button, Modal, ModalHeader, ModalBody,
                             <RenderDish dish={props.dish} />
                         </div>
                         <div className="col-12 col-md-5 ">
-                            <RenderComments comments = {props.dish?props.comments:null} />   
+                            <RenderComments comments = {props.dish?props.comments:null}
+                            addComment = {props.addComment}
+                            dishId={props.dish.id} />   
                         </div>
                     </div>
                 </div>
