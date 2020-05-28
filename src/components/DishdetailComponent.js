@@ -6,6 +6,7 @@ import {Control, LocalForm, Errors} from 'react-redux-form';
 import {Button, Modal, ModalHeader, ModalBody,
     Label, Col, Row} from 'reactstrap';
 import {Loading}  from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 
 
@@ -14,7 +15,7 @@ import {Loading}  from './LoadingComponent';
             return (
                 
                     <Card>
-                        <CardImg top src={dish.image} alt={dish.name} />
+                        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                         <CardBody>
                         <CardTitle>{dish.name}</CardTitle>
                         <CardText>{dish.description}</CardText>
