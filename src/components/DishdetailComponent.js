@@ -54,7 +54,7 @@ import { baseUrl } from '../shared/baseUrl';
 
         handleSubmit(values){
             this.toggleModal();   
-            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+            this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
         }
 
     
@@ -130,7 +130,7 @@ import { baseUrl } from '../shared/baseUrl';
         ); }      
     }
 
-    function RenderComments({comments, addComment, dishId}){
+    function RenderComments({comments, postComment, dishId}){
        
         if(comments !== null){
             const commentView = comments.map((c) => 
@@ -147,7 +147,7 @@ import { baseUrl } from '../shared/baseUrl';
                     <ul className = "list-unstyled">
                         {commentView}
                     </ul>
-                    <CommentForm dishId={dishId} addComment={addComment}/>   
+                    <CommentForm dishId={dishId} postComment={postComment}/>   
                     <Row>&nbsp;</Row>               
                 </div>        
              
@@ -203,7 +203,7 @@ import { baseUrl } from '../shared/baseUrl';
                             </div>
                             <div className="col-12 col-md-5 ">
                                 <RenderComments comments = {props.dish?props.comments:null}
-                                addComment = {props.addComment}
+                                postComment = {props.postComment}
                                 dishId={props.dish.id} />   
                             </div>
                         </div>
